@@ -16,40 +16,48 @@
     color: #2196f3;
   }
 
-  .from {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: space-between;
+  .infoWrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 4rem;
+    margin-top: 1rem;
+
+    &:nth-of-type(1) {
+      grid-area: infoWrapper1;
+    }
+
+    &:nth-of-type(2) {
+      grid-area: infoWrapper2;
+    }
   }
 
-  .time {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: space-between;
-  }
-
+  .from,
+  .time,
   .transfer {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    text-transform: uppercase;
+    justify-content: flex-start;
   }
 
-  .infoWrapper {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 1rem;
+  .grayLine {
+    color: #a0b0b9;
     font-size: 12px;
     text-transform: uppercase;
     font-weight: 500;
     line-height: 18px;
     letter-spacing: 0.5px;
+  }
 
-    .grayLine {
-      color: #a0b0b9;
-    }
+  .from {
+    grid-column: 1 / span 1;
+  }
+
+  .time {
+    grid-column: 2 / span 1;
+  }
+
+  .transfer {
+    grid-column: 3 / span 1;
   }
 }

@@ -9,26 +9,19 @@ export const fetchSearchId = createAsyncThunk('tickets/fetchSearchId', async () 
   return data.searchId;
 });
 
-export const fetchTickets = createAsyncThunk(
-  'tickets/fetchTickets',
-  async (searchId, { getState, rejectWithValue }) => {
-    try {
-      const response = await fetch(`https://aviasales-test-api.kata.academy/tickets?searchId=${searchId}`);
-      if (!response.ok) {
-        throw new Error('Ошибка при получении билетов');
-      }
-      const data = await response.json();
-      return data; // Возвращает { tickets: [], stop: false }
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
+export const fetchTickets = createAsyncThunk('tickets/fetchTickets', async (searchId, { rejectWithValue }) => {
+  try {
+    const response = await fetch(`https://aviasales-test-api.kata.academy/tickets?searchId=${searchId}`);
+    return await response.json();
+  } catch (error) {
+    return rejectWithValue(error.message);
   }
-);
+});
 
 const initialState = {
-  tickets: [], // Массив всех полученных билетов
-  loading: 'idle', // Состояние загрузки ('idle', 'loading', 'succeeded', 'failed')
-  error: null, // Ошибка, если что-то пошло не так
+  tickets: [],
+  loading: 'idle',
+  error: null,
 };
 
 const ticketsSlice = createSlice({
@@ -37,21 +30,19 @@ const ticketsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      // Обработка получения searchId
-      .addCase(fetchSearchId.fulfilled, (state, action) => {
-        state.loading = 'loading'; // Начинаем загрузку билетов
+      .addCase(fetchSearchId.fulfilled, (state) => {
+        state.loading = 'loading';
       })
       .addCase(fetchSearchId.rejected, (state, action) => {
         state.loading = 'failed';
         state.error = action.error.message;
       })
-      // Обработка получения билетов
       .addCase(fetchTickets.pending, (state) => {
         state.loading = 'loading';
       })
       .addCase(fetchTickets.fulfilled, (state, action) => {
         state.loading = 'succeeded';
-        state.tickets = [...state.tickets, ...action.payload.tickets]; // Добавляем новые билеты
+        state.tickets = [...state.tickets, ...action.payload.tickets];
       })
       .addCase(fetchTickets.rejected, (state, action) => {
         state.loading = 'failed';
