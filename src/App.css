@@ -1,0 +1,19 @@
+#root {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.wrapper {
+  display: flex;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  margin-left: 2rem;
+}
+
+body {
+  display: flex;
+  min-height: 100vh;
+}

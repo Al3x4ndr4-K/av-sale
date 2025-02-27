@@ -16,6 +16,7 @@ export default {
         Open_Sans: {
           300: ['normal'],
           400: ['normal'],
+          500: ['normal'],
           600: ['normal'],
           700: ['normal'],
         },
