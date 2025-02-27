@@ -16,6 +16,7 @@ export const fetchTickets = createAsyncThunk('tickets/fetchTickets', async (sear
 
 const initialState = {
   tickets: [],
+  currentPage: 1,
   loading: 'idle',
   error: null,
 };
@@ -23,7 +24,11 @@ const initialState = {
 const ticketsSlice = createSlice({
   name: 'tickets',
   initialState,
-  reducers: {},
+  reducers: {
+    setCurrentPage(state, action) {
+      state.currentPage = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchSearchId.fulfilled, (state) => {
@@ -47,4 +52,5 @@ const ticketsSlice = createSlice({
   },
 });
 
+export const { setCurrentPage } = ticketsSlice.actions;
 export default ticketsSlice.reducer;

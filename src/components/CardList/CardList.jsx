@@ -2,15 +2,28 @@ import { fetchSearchId, fetchTickets } from '../../store/tickets/tickets.slice.j
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import Card from '../Card/Card.jsx';
-import { selectError, selectFilteredTickets, selectLoadingStatus } from '../../store/selectors/selectors.js';
+import {
+  selectCurrentPage,
+  selectError,
+  selectFilteredTickets,
+  selectLoadingStatus,
+} from '../../store/selectors/selectors.js';
 import cardList from './CardList.module.scss';
+import { Pagination } from '@mui/material';
+import { usePaginationHandler } from '../../utils/handlePageUtil.js';
+import { calculatePageCount, paginateTickets } from '../../utils/paginationUtil.js';
 
 export default function CardList() {
   const dispatch = useDispatch();
-
+  const currentPage = useSelector(selectCurrentPage);
   const filteredTickets = useSelector(selectFilteredTickets);
   const loading = useSelector(selectLoadingStatus);
   const error = useSelector(selectError);
+  const ticketsPerPage = 5;
+
+  const currentTickets = paginateTickets(filteredTickets, currentPage, ticketsPerPage);
+  const pageCount = calculatePageCount(filteredTickets, ticketsPerPage);
+  const handlePageChange = usePaginationHandler();
 
   useEffect(() => {
     dispatch(fetchSearchId())
@@ -36,9 +49,13 @@ export default function CardList() {
   return (
     <div>
       <div>
-        {filteredTickets.map((ticket, index) => (
+        {currentTickets.map((ticket, index) => (
           <Card key={index} ticket={ticket} />
         ))}
+      </div>
+
+      <div className={cardList.pagination}>
+        <Pagination count={pageCount} page={currentPage} onChange={(event, page) => handlePageChange(page)} />
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ export const selectTickets = (state) => state.tickets.tickets;
 export const selectFilters = (state) => state.filters.filters;
 export const selectLoadingStatus = (state) => state.tickets.loading;
 export const selectError = (state) => state.tickets.error;
+export const selectCurrentPage = (state) => state.tickets.currentPage;
 
 export const selectFilteredTickets = createSelector([selectTickets, selectFilters], (tickets, filters) => {
   if (!tickets || tickets.length === 0) return [];
