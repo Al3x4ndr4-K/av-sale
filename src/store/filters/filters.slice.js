@@ -18,14 +18,10 @@ const filtersSlice = createSlice({
       const filterName = action.payload;
 
       if (filterName === 'all') {
-        const allChecked = !state.filters.all;
-        state.filters = {
-          all: allChecked,
-          noTransfers: allChecked,
-          oneTransfer: allChecked,
-          twoTransfers: allChecked,
-          threeTransfers: allChecked,
-        };
+        const newValue = !state.filters.all;
+        Object.keys(state.filters).forEach((key) => {
+          state.filters[key] = newValue;
+        });
       } else {
         state.filters[filterName] = !state.filters[filterName];
 
@@ -34,10 +30,6 @@ const filtersSlice = createSlice({
           state.filters.oneTransfer &&
           state.filters.twoTransfers &&
           state.filters.threeTransfers;
-
-        if (!state.filters[filterName]) {
-          state.filters.all = false;
-        }
       }
     },
   },

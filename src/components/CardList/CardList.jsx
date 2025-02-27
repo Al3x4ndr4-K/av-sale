@@ -2,10 +2,15 @@ import { fetchSearchId, fetchTickets } from '../../store/tickets/tickets.slice.j
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import Card from '../Card/Card.jsx';
+import { selectError, selectFilteredTickets, selectLoadingStatus } from '../../store/selectors/selectors.js';
+import cardList from './CardList.module.scss';
 
-export default function TicketLoader() {
+export default function CardList() {
   const dispatch = useDispatch();
-  const { tickets, loading, error } = useSelector((state) => state.tickets);
+
+  const filteredTickets = useSelector(selectFilteredTickets);
+  const loading = useSelector(selectLoadingStatus);
+  const error = useSelector(selectError);
 
   useEffect(() => {
     dispatch(fetchSearchId())
@@ -19,21 +24,19 @@ export default function TicketLoader() {
   }, [dispatch]);
 
   if (loading === 'loading') {
-    return <p>Загрузка...</p>;
+    return <p className={cardList.text}>Загрузка...</p>;
   }
-
   if (loading === 'failed') {
-    return <p>Ошибка: {error}</p>;
+    return <p className={cardList.text}>Ошибка: {error}</p>;
   }
-
-  if (!tickets || tickets.length === 0) {
-    return <p>Рейсов, подходящих под заданные фильтры, не найдено</p>;
+  if (!filteredTickets || filteredTickets.length === 0) {
+    return <p className={cardList.text}>Рейсов, подходящих под заданные фильтры, не найдено</p>;
   }
 
   return (
     <div>
       <div>
-        {tickets.map((ticket, index) => (
+        {filteredTickets.map((ticket, index) => (
           <Card key={index} ticket={ticket} />
         ))}
       </div>
