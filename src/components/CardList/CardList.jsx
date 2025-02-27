@@ -5,8 +5,8 @@ import Card from '../Card/Card.jsx';
 import {
   selectCurrentPage,
   selectError,
-  selectFilteredTickets,
   selectLoadingStatus,
+  selectSortedTickets,
 } from '../../store/selectors/selectors.js';
 import cardList from './CardList.module.scss';
 import { Pagination } from '@mui/material';
@@ -15,14 +15,16 @@ import { calculatePageCount, paginateTickets } from '../../utils/paginationUtil.
 
 export default function CardList() {
   const dispatch = useDispatch();
+
   const currentPage = useSelector(selectCurrentPage);
-  const filteredTickets = useSelector(selectFilteredTickets);
   const loading = useSelector(selectLoadingStatus);
   const error = useSelector(selectError);
+  const sortedTickets = useSelector(selectSortedTickets);
+
   const ticketsPerPage = 5;
 
-  const currentTickets = paginateTickets(filteredTickets, currentPage, ticketsPerPage);
-  const pageCount = calculatePageCount(filteredTickets, ticketsPerPage);
+  const currentTickets = paginateTickets(sortedTickets, currentPage, ticketsPerPage);
+  const pageCount = calculatePageCount(sortedTickets, ticketsPerPage);
   const handlePageChange = usePaginationHandler();
 
   useEffect(() => {
@@ -42,13 +44,13 @@ export default function CardList() {
   if (loading === 'failed') {
     return <p className={cardList.text}>Ошибка: {error}</p>;
   }
-  if (!filteredTickets || filteredTickets.length === 0) {
+  if (!sortedTickets || sortedTickets.length === 0) {
     return <p className={cardList.text}>Рейсов, подходящих под заданные фильтры, не найдено</p>;
   }
 
   return (
-    <div>
-      <div>
+    <>
+      <div className={cardList.listContainer}>
         {currentTickets.map((ticket, index) => (
           <Card key={index} ticket={ticket} />
         ))}
@@ -57,6 +59,6 @@ export default function CardList() {
       <div className={cardList.pagination}>
         <Pagination count={pageCount} page={currentPage} onChange={(event, page) => handlePageChange(page)} />
       </div>
-    </div>
+    </>
   );
 }
