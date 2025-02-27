@@ -27,7 +27,7 @@ export default function TicketLoader() {
   }
 
   if (!tickets || tickets.length === 0) {
-    return <p>Нет доступных билетов</p>;
+    return <p>Рейсов, подходящих под заданные фильтры, не найдено</p>;
   }
 
   return (

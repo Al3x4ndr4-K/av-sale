@@ -1,18 +1,14 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
+import { fetchSearchId as fetchSearchIdApi, fetchTickets as fetchTicketsApi } from '../../api/ticketsApi.js';
+
 export const fetchSearchId = createAsyncThunk('tickets/fetchSearchId', async () => {
-  const response = await fetch('https://aviasales-test-api.kata.academy/search');
-  if (!response.ok) {
-    throw new Error('Не удалось получить searchId');
-  }
-  const data = await response.json();
-  return data.searchId;
+  return await fetchSearchIdApi();
 });
 
 export const fetchTickets = createAsyncThunk('tickets/fetchTickets', async (searchId, { rejectWithValue }) => {
   try {
-    const response = await fetch(`https://aviasales-test-api.kata.academy/tickets?searchId=${searchId}`);
-    return await response.json();
+    return await fetchTicketsApi(searchId);
   } catch (error) {
     return rejectWithValue(error.message);
   }
