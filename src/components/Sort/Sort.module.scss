@@ -15,6 +15,7 @@
     height: 4rem;
     width: 13rem;
     transition: all 0.3s;
+    padding: 15px;
 
     &:hover {
       background: #f1fcff;
@@ -33,6 +34,18 @@
     &.active {
       background: #2196f3;
       color: #ffffff;
+    }
+
+    &:focus {
+      outline: none;
+    }
+    
+    &:focus-visible {
+      box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.4);
+      outline: 2px solid #2196F3;
+      outline-offset: 2px;
+      position: relative;
+      z-index: 1;
     }
   }
 }

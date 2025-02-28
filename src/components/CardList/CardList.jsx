@@ -1,65 +1,49 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { memo, useMemo } from 'react';
 import { CircularProgress } from '@mui/material';
-import { LOADING_DELAY } from '../../utils/constants/ticketsConstUtil';
+
 import { useTicketsLoading } from '../../hooks/useTicketsLoading';
-import {
-  selectError,
-  selectSortedTickets,
-  selectVisibleTickets,
-  selectFilteredTickets,
-} from '../../store/selectors/selectors';
-import { increaseVisibleCount, setLoadingMore } from '../../store/tickets/tickets.slice';
+import { useTicketsList } from '../../hooks/useTicketsList';
 import Card from '../Card/Card';
+import LoadMoreButton from '../LoadMoreButton/LoadMoreButton';
+import MessageDisplay from '../MessageDisplay/MessageDisplay';
 import cardList from './CardList.module.scss';
 
-export default function CardList() {
-  const dispatch = useDispatch();
-
+const CardList = memo(function CardList() {
   useTicketsLoading();
 
-  const error = useSelector(selectError);
-  const allTickets = useSelector(selectSortedTickets);
-  const visibleTickets = useSelector(selectVisibleTickets);
-  const filteredTickets = useSelector(selectFilteredTickets);
-  const isLoadingMore = useSelector((state) => state.tickets.isLoadingMore);
+  const { error, allTickets, visibleTickets, filteredTickets, isLoadingMore, handleShowMore } = useTicketsList();
 
-  const showMore = () => {
-    dispatch(setLoadingMore(true));
-    setTimeout(() => {
-      dispatch(increaseVisibleCount());
-      dispatch(setLoadingMore(false));
-    }, LOADING_DELAY);
-  };
+  const renderedTickets = useMemo(() => {
+    return visibleTickets.map((ticket, index) => (
+      <div key={`${ticket.carrier}-${index}`}>
+        {isLoadingMore && index >= visibleTickets.length - 5 ? (
+          <div className={cardList.loader}>
+            <CircularProgress />
+          </div>
+        ) : (
+          <Card ticket={ticket} />
+        )}
+      </div>
+    ));
+  }, [visibleTickets, isLoadingMore]);
 
   if (error) {
-    return <p className={cardList.text}>Ошибка: {error}</p>;
+    return <MessageDisplay message={`Ошибка: ${error}`} />;
   }
 
-  if (!filteredTickets || filteredTickets.length === 0) {
-    return <p className={cardList.text}>Рейсов, подходящих под заданные фильтры, не найдено</p>;
+  if (!filteredTickets?.length) {
+    return <MessageDisplay message="Рейсов, подходящих под заданные фильтры, не найдено" />;
   }
 
   return (
     <>
-      <div className={cardList.listContainer}>
-        {visibleTickets.map((ticket, index) => (
-          <div key={index}>
-            {isLoadingMore && index >= visibleTickets.length - 5 ? (
-              <div className={cardList.loader}>
-                <CircularProgress />
-              </div>
-            ) : (
-              <Card ticket={ticket} />
-            )}
-          </div>
-        ))}
-      </div>
+      <div className={cardList.listContainer}>{renderedTickets}</div>
 
       {allTickets.length > visibleTickets.length && (
-        <button onClick={showMore} className={cardList.loadMoreButton} disabled={isLoadingMore}>
-          {isLoadingMore ? 'Загрузка...' : 'Показать ещё билеты'}
-        </button>
+        <LoadMoreButton onClick={handleShowMore} isLoading={isLoadingMore} />
       )}
     </>
   );
-}
+});
+
+export default CardList;
