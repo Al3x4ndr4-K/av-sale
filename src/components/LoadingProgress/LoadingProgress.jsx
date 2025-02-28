@@ -8,7 +8,7 @@ export default function LoadingProgress() {
 
   return (
     <div className={styles.progressWrapper}>
-      <LinearProgress variant="determinate" value={progress} className={styles.progress} />
+      <LinearProgress variant="determinate" value={progress} className={styles.progress} sx={{ height: '0.5rem' }} />
     </div>
   );
 }
