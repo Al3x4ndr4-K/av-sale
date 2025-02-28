@@ -19,6 +19,11 @@ const initialState = {
   currentPage: 1,
   loading: 'idle',
   error: null,
+  hasMore: true,
+  itemsPerPage: 5,
+  searchId: null,
+  visibleCount: 5,
+  isLoadingMore: false,
 };
 
 const ticketsSlice = createSlice({
@@ -28,22 +33,32 @@ const ticketsSlice = createSlice({
     setCurrentPage(state, action) {
       state.currentPage = action.payload;
     },
+    increaseVisibleCount: (state) => {
+      state.visibleCount += 5;
+    },
+    setLoadingMore: (state, action) => {
+      state.isLoadingMore = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchSearchId.fulfilled, (state) => {
+      .addCase(fetchSearchId.fulfilled, (state, action) => {
         state.loading = 'loading';
+        state.searchId = action.payload;
       })
       .addCase(fetchSearchId.rejected, (state, action) => {
         state.loading = 'failed';
         state.error = action.error.message;
       })
       .addCase(fetchTickets.pending, (state) => {
-        state.loading = 'loading';
+        if (state.tickets.length === 0) {
+          state.loading = 'loading';
+        }
       })
       .addCase(fetchTickets.fulfilled, (state, action) => {
         state.loading = 'succeeded';
         state.tickets = [...state.tickets, ...action.payload.tickets];
+        state.hasMore = !action.payload.stop;
       })
       .addCase(fetchTickets.rejected, (state, action) => {
         state.loading = 'failed';
@@ -52,5 +67,17 @@ const ticketsSlice = createSlice({
   },
 });
 
-export const { setCurrentPage } = ticketsSlice.actions;
+export const { setCurrentPage, increaseVisibleCount, setLoadingMore } = ticketsSlice.actions;
+
+export const selectCurrentPageTickets = (state) => {
+  const { tickets, currentPage, itemsPerPage } = state.tickets;
+  const startIndex = 0;
+  const endIndex = currentPage * itemsPerPage;
+  return tickets.slice(startIndex, endIndex);
+};
+
+export const selectVisibleTickets = (state) => {
+  return state.tickets.tickets.slice(0, state.tickets.visibleCount);
+};
+
 export default ticketsSlice.reducer;

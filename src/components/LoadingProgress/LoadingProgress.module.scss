@@ -1,0 +1,11 @@
+.progressWrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1100; // Убедимся, что прогресс-бар будет поверх всего
+}
+
+.progress {
+  height: 4px; // Тонкая полоска
+} 

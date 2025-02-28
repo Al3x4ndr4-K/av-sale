@@ -3,38 +3,31 @@
   color: #4a4a4a;
 }
 
-.pagination {
+.loadMoreButton {
+  background-color: #2196f3;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 1.7rem;
+  padding: 1.2rem;
+  font: inherit;
+  font-size: 12px;
+  text-transform: uppercase;
+
+  &:hover {
+    background-color: #1976d2;
+    transition: all 0.3s ease;
+  }
+}
+
+.loader {
+  background: #ffffff;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: center;
-  margin-bottom: 1.7rem;
-}
-
-.listContainer {
-}
-
-.fade-enter {
-  opacity: 0;
-  transform: translateY(20px);
-  transition:
-    opacity 0.3s ease,
-    transform 0.3s ease;
-}
-
-.fade-enter-active {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Анимация исчезновения */
-.fade-exit {
-  opacity: 1;
-  transform: translateY(0);
-  transition:
-    opacity 0.3s ease,
-    transform 0.3s ease;
-}
-
-.fade-exit-active {
-  opacity: 0;
-  transform: translateY(-20px);
+  align-items: center;
+  min-height: 172px;
 }

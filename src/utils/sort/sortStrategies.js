@@ -1,5 +1,5 @@
-import { getTotalDuration } from './durationTotalUtil.js';
-import { normalize } from './normalaze.js';
+import { getTotalDuration } from '../normalize/durationTotalUtil.js';
+import { normalize } from '../normalize/normalaze.js';
 
 export const sortByPrice = (tickets) => [...tickets].sort((a, b) => a.price - b.price);
 

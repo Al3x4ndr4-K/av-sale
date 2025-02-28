@@ -1,4 +1,4 @@
-import { pluralize } from './pluralizeUtil.js';
+import { pluralize } from '../normalize/pluralizeUtil.js';
 
 export const formatStops = (stops) => {
   if (stops.length === 0) {

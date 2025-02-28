@@ -1,7 +1,7 @@
 import cardStyle from './Card.module.scss';
-import { calculateArrivalTime, formatDuration, formatTime } from '../../utils/dateUtil.js';
-import { formatPrice } from '../../utils/priceUtil.js';
-import { formatStops } from '../../utils/formatUtil.js';
+import { calculateArrivalTime, formatDuration, formatTime } from '../../utils/format/dateUtil.js';
+import { formatPrice } from '../../utils/format/priceUtil.js';
+import { formatStops } from '../../utils/format/formatUtil.js';
 
 export default function Card({ ticket }) {
   const {
